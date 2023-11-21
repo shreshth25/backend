@@ -6,7 +6,7 @@ from django.conf import settings
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['name']
+        fields = ['name','email']
 
 class RegisterSerializer(serializers.ModelSerializer):
 
@@ -23,7 +23,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 class PostSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
     class Meta:
         model = Post
         fields = '__all__'
@@ -36,6 +36,7 @@ class PostSerializer(serializers.ModelSerializer):
     
 
 class ReelSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     class Meta:
         model = Reel
         fields = '__all__'

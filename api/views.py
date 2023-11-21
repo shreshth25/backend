@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import RegisterSerializer, LoginSerializer, PostSerializer, ReelSerializer
+from .serializers import RegisterSerializer, LoginSerializer, PostSerializer, ReelSerializer, UserSerializer
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -46,11 +46,8 @@ class UserProfile(APIView):
 
     def get(self, request, format=None):
         user = User.objects.filter(id=request.user.id).first()
-        print(user)
-        content = {
-            'status': 'request was permitted'
-        }
-        return Response(content)
+        serializer = UserSerializer(user)
+        return CustomResponse("User Profile", {"data": serializer.data} , status.HTTP_200_OK)
        
 
 
@@ -67,10 +64,9 @@ class PostView(APIView):
         
     def post(self, request, format=None):
         try:
-            print(request.data)
             serializer  = PostSerializer(data = request.data)
             if serializer.is_valid():
-                serializer.save()
+                serializer.save(user=request.user)
                 return CustomResponse("Post Created", {} , status.HTTP_200_OK)
             else:
                 print(serializer.errors)
@@ -95,7 +91,7 @@ class ReelView(APIView):
             print(request.data)
             serializer  = ReelSerializer(data = request.data)
             if serializer.is_valid():
-                serializer.save()
+                serializer.save(user=request.user)
                 return CustomResponse("Reel Created", {} , status.HTTP_200_OK)
             else:
                 print(serializer.errors)
