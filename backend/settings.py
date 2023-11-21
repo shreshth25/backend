@@ -151,5 +151,6 @@ BASE_URL = 'https://shreshthbansal.pythonanywhere.com'
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173"
+    "http://localhost:5173",
+    'https://minstagramtask.netlify.app'
 ]
